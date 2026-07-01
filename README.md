@@ -8,6 +8,6 @@ The NO button legally cannot be clicked for 60 seconds. It just runs away like i
 
 Try it
 
-👉 anukya01.github.io/ellehe
+👉 https://anukya01.github.io/ellehe/
 
 Warning: NO button has trust issues. YES button just wants a hug (platonic, obviously).
