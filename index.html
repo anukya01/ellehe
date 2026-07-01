@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#ffe5ec;
+    --bg-2:#ffc2d1;
+    --bg-3:#ffb3c6;
+    --accent:#ff477e;
+    --accent-dark:#c9184a;
+    --ink:#5b3a4a;
+    --card-bg:rgba(255,255,255,0.72);
+    --shadow: 0 20px 45px rgba(201, 24, 74, 0.18);
+    --transition-speed: 0.6s;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0; padding:0; width:100%; height:100%;
+    font-family:'Quicksand', sans-serif;
+    color: var(--ink);
+    overflow:hidden;
+  }
+
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
+    background-size: 200% 200%;
+    animation: driftGradient 12s ease infinite;
+    transition: background var(--transition-speed) ease;
+    position:relative;
+    padding: 24px;
+  }
+
+  @keyframes driftGradient{
+    0%{ background-position: 0% 50%; }
+    50%{ background-position: 100% 50%; }
+    100%{ background-position: 0% 50%; }
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    max-width:480px;
+    z-index: 1;
+  }
+
+  .card{
+    background: var(--card-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    padding: 48px 36px;
+    text-align:center;
+    transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+    position:relative;
+  }
+
+  .screen{
+    position:relative;
+  }
+
+  .hidden-screen{
+    display:none;
+  }
+
+  .fade-enter{
+    animation: fadeInUp 0.7s ease forwards;
+  }
+
+  @keyframes fadeInUp{
+    from{ opacity:0; transform: translateY(24px) scale(0.97); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  .glyph{
+    font-size: 4.2rem;
+    line-height:1;
+    margin-bottom: 8px;
+    display:inline-block;
+    animation: floaty 3.5s ease-in-out infinite;
+  }
+
+  @keyframes floaty{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-10px); }
+  }
+
+  h1{
+    font-family:'Poppins', sans-serif;
+    font-weight:800;
+    font-size: 2.1rem;
+    margin: 6px 0 8px;
+    color: var(--accent-dark);
+  }
+
+  .error-code{
+    font-family:'Poppins', sans-serif;
+    font-weight:800;
+    font-size: 4.5rem;
+    margin:0;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+    -webkit-background-clip: text;
+    background-clip:text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  p.sub{
+    font-size: 1.05rem;
+    margin: 0 0 30px;
+    opacity: 0.85;
+  }
+
+  .btn{
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size: 1rem;
+    border:none;
+    border-radius: 999px;
+    padding: 14px 34px;
+    cursor:pointer;
+    box-shadow: 0 10px 22px rgba(201,24,74,0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.5s ease, background 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn:hover{
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 26px rgba(201,24,74,0.32);
+  }
+
+  .btn:active{
+    transform: translateY(0) scale(0.98);
+  }
+
+  .btn-primary{
+    background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+    color:#fff;
+  }
+
+  .btn-secondary{
+    background: #ffffff;
+    color: var(--accent-dark);
+    border: 2px solid var(--accent);
+  }
+
+  .btn-row{
+    display:flex;
+    gap: 18px;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+    position:relative;
+    min-height: 60px;
+  }
+
+  #noBtn{
+    position: relative;
+    z-index: 5;
+  }
+
+  #noBtn.jumping{
+    position: fixed;
+    z-index: 9999;
+  }
+
+  .fading-out{
+    opacity: 0 !important;
+    pointer-events: none;
+    transform: scale(0.85);
+  }
+
+  #heartEmoji{
+    font-size: 2.6rem;
+    display:block;
+    margin-bottom: 6px;
+    transition: transform 0.3s ease;
+  }
+
+  #yayScreen{
+    margin-top: 0;
+    max-height:0;
+    opacity:0;
+    overflow:hidden;
+    padding-top: 8px;
+    transition: opacity 0.7s ease, max-height 0.7s ease, margin-top 0.7s ease;
+  }
+
+  #yayScreen.show{
+    opacity:1;
+    max-height: 400px;
+    margin-top: 8px;
+  }
+
+  .yay-hearts{
+    font-size: 1.6rem;
+    letter-spacing: 8px;
+    margin-bottom: 6px;
+  }
+
+  .yay-hearts span{
+    display:inline-block;
+  }
+
+  @keyframes floatBob{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-10px); }
+  }
+
+  .yay-title{
+    font-family:'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 2.6rem;
+    color: var(--accent-dark);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 10px;
+    margin: 6px 0;
+    animation: floatBob 2.8s ease-in-out infinite;
+    animation-delay: 0.2s;
+  }
+
+  .yay-sub{
+    font-family:'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 8px;
+    margin-top: 4px;
+    animation: floatBob 3.2s ease-in-out infinite;
+    animation-delay: 0.35s;
+  }
+
+  /* Ambient floating hearts across the whole page */
+  #bgHearts{
+    position: fixed;
+    inset: 0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index: 0;
+  }
+
+  .bg-heart{
+    position:absolute;
+    bottom: -10vh;
+    opacity: 0.35;
+    color: var(--accent);
+    animation-name: floatUp;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes floatUp{
+    0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity: 0.35; }
+    90%{ opacity: 0.35; }
+    100%{ transform: translateY(-120vh) translateX(20px) rotate(20deg); opacity:0; }
+  }
+
+  #confettiCanvas{
+    position: fixed;
+    top:0; left:0;
+    width:100vw; height:100vh;
+    pointer-events:none;
+    z-index: 10000;
+  }
+
+  @media (max-width: 420px){
+    .card{ padding: 36px 22px; border-radius: 22px; }
+    h1{ font-size: 1.7rem; }
+    .error-code{ font-size: 3.6rem; }
+    .btn{ padding: 12px 26px; font-size: 0.95rem; }
+    .yay-title{ font-size: 2.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="bgHearts"></div>
+<canvas id="confettiCanvas"></canvas>
+
+<div class="stage">
+  <div class="card">
+
+    <!-- SCREEN 1: 404 -->
+    <div id="screen404" class="screen fade-enter">
+      <div class="glyph">🙈</div>
+      <p class="error-code">404</p>
+      <h1>Page Not Found</h1>
+      <p class="sub">Hmm, this page wandered off somewhere. Let's try that again.</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="refreshBtn">Refresh</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: Valentine -->
+    <div id="screenValentine" class="screen hidden-screen">
+      <span id="heartEmoji">💗</span>
+      <h1>Will you be my Valentine?</h1>
+      <p class="sub">Choose wisely.</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="yesBtn">YES</button>
+        <button class="btn btn-secondary" id="noBtn">NO</button>
+      </div>
+      <div id="yayScreen">
+        <div class="yay-hearts">
+          <span>❤️</span><span>❤️</span><span>❤️</span><span>❤️</span><span>❤️</span>
+        </div>
+        <div class="yay-title">Yay! 🎉</div>
+        <div class="yay-sub">You made my day! 🧡</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  const body = document.body;
+  const screen404 = document.getElementById('screen404');
+  const screenValentine = document.getElementById('screenValentine');
+  const refreshBtn = document.getElementById('refreshBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+  const heartEmoji = document.getElementById('heartEmoji');
+  const yayScreen = document.getElementById('yayScreen');
+  const bgHearts = document.getElementById('bgHearts');
+
+  const gradientSets = [
+    ['#ffe5ec', '#ffc2d1', '#ffb3c6'],
+    ['#e0c3fc', '#8ec5fc', '#c3aefc'],
+    ['#fbc2eb', '#a6c1ee', '#fbc2eb'],
+    ['#ffdde1', '#ee9ca7', '#ffc3a0'],
+    ['#d4fc79', '#96e6a1', '#a1ffce'],
+    ['#f6d365', '#fda085', '#f6d365'],
+    ['#84fab0', '#8fd3f4', '#84fab0']
+  ];
+
+  let noClickCount = 0;
+  let noBtnActive = true;
+  let canDodge = true;
+  let dodgeTimeout = null;
+  const DODGE_DURATION = 60000; // 60 seconds of evasion before NO can be caught
+  const valentineBtnRow = screenValentine.querySelector('.btn-row');
+
+  function returnNoBtnHome(){
+    noBtn.classList.remove('jumping');
+    noBtn.style.position = '';
+    noBtn.style.left = '';
+    noBtn.style.top = '';
+    if (noBtn.parentElement !== valentineBtnRow) {
+      valentineBtnRow.appendChild(noBtn);
+    }
+  }
+
+  // ---- Ambient floating hearts across the whole page ----
+  const heartGlyphs = ['❤️', '💗', '💕', '💖'];
+  function spawnBgHeart(){
+    const el = document.createElement('span');
+    el.className = 'bg-heart';
+    el.textContent = heartGlyphs[Math.floor(Math.random() * heartGlyphs.length)];
+    const size = 14 + Math.random() * 22;
+    const duration = 8 + Math.random() * 10;
+    el.style.left = (Math.random() * 100) + 'vw';
+    el.style.fontSize = size + 'px';
+    el.style.animationDuration = duration + 's';
+    bgHearts.appendChild(el);
+    setTimeout(() => el.remove(), duration * 1000);
+  }
+  for (let i = 0; i < 12; i++){
+    setTimeout(spawnBgHeart, i * 400);
+  }
+  setInterval(spawnBgHeart, 900);
+
+  // ---- Screen transition: 404 -> Valentine ----
+  refreshBtn.addEventListener('click', () => {
+    screen404.style.opacity = '0';
+    screen404.style.transform = 'translateY(-16px) scale(0.97)';
+    setTimeout(() => {
+      screen404.classList.add('hidden-screen');
+      screenValentine.classList.remove('hidden-screen');
+      screenValentine.classList.add('fade-enter');
+      // NO button stays in normal flow, right beside YES, until it first dodges
+
+      // After 60s of successfully dodging, NO gives up and becomes catchable
+      dodgeTimeout = setTimeout(() => {
+        canDodge = false;
+        returnNoBtnHome();
+      }, DODGE_DURATION);
+    }, 350);
+  });
+
+  // ---- YES button ----
+  yesBtn.addEventListener('click', () => {
+    noBtnActive = false;
+    canDodge = false;
+    if (dodgeTimeout) clearTimeout(dodgeTimeout);
+    yayScreen.classList.add('show');
+
+    setTimeout(() => {
+      yesBtn.classList.add('fading-out');
+      noBtn.classList.add('fading-out');
+      returnNoBtnHome();
+    }, 1000);
+
+    launchConfetti(5000);
+  });
+
+  // ---- NO button: dodges the cursor before it ever gets close enough to click ----
+  const DODGE_RADIUS = 90;   // px — how close the cursor can get before it flees
+  const DODGE_COOLDOWN = 150; // ms — minimum time between dodges
+  let lastDodgeTime = 0;
+
+  function dodgeNoButton(){
+    if (!noBtnActive || !canDodge) return;
+    const now = Date.now();
+    if (now - lastDodgeTime < DODGE_COOLDOWN) return;
+    lastDodgeTime = now;
+
+    noClickCount++;
+    if (noBtn.parentElement !== document.body) {
+      document.body.appendChild(noBtn);
+    }
+    noBtn.classList.add('jumping');
+
+    const btnW = noBtn.offsetWidth || 120;
+    const btnH = noBtn.offsetHeight || 50;
+    const maxX = Math.max(window.innerWidth - btnW - 16, 16);
+    const maxY = Math.max(window.innerHeight - btnH - 16, 16);
+    const randX = 16 + Math.random() * (maxX - 16);
+    const randY = 16 + Math.random() * (maxY - 16);
+    noBtn.style.left = randX + 'px';
+    noBtn.style.top = randY + 'px';
+
+    // Change background gradient
+    const set = gradientSets[Math.floor(Math.random() * gradientSets.length)];
+    document.documentElement.style.setProperty('--bg-1', set[0]);
+    document.documentElement.style.setProperty('--bg-2', set[1]);
+    document.documentElement.style.setProperty('--bg-3', set[2]);
+    body.style.background = `linear-gradient(135deg, ${set[0]}, ${set[1]}, ${set[2]})`;
+    body.style.backgroundSize = '200% 200%';
+
+    // Emoji swap after two dodges
+    if (noClickCount === 1) {
+      heartEmoji.textContent = '💔';
+    } else if (noClickCount >= 2) {
+      heartEmoji.textContent = '😭';
+    }
+    heartEmoji.style.transform = 'scale(1.3)';
+    setTimeout(() => { heartEmoji.style.transform = 'scale(1)'; }, 200);
+  }
+
+  // Desktop: check distance from cursor to the button on every mouse move,
+  // and flee as soon as the cursor comes within DODGE_RADIUS
+  document.addEventListener('mousemove', (e) => {
+    if (!noBtnActive || !canDodge || screenValentine.classList.contains('hidden-screen')) return;
+    const rect = noBtn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+    if (dist < DODGE_RADIUS) {
+      dodgeNoButton();
+    }
+  });
+
+  // Mobile/touch: flee before a tap can register (only while still dodging)
+  noBtn.addEventListener('touchstart', (e) => {
+    if (!noBtnActive || !canDodge) return;
+    e.preventDefault();
+    dodgeNoButton();
+  }, { passive: false });
+
+  // Click handling: while dodging, a click just triggers another dodge.
+  // Once the 60s window has passed, a click actually lands — NO disappears
+  // and YES is left as the only option.
+  noBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!noBtnActive) return;
+
+    if (canDodge) {
+      dodgeNoButton();
+      return;
+    }
+
+    // Caught! NO surrenders and fades away, leaving only YES.
+    noBtn.classList.add('fading-out');
+    setTimeout(() => {
+      noBtn.style.display = 'none';
+    }, 500);
+  });
+
+  // ---- Confetti ----
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  let confettiParticles = [];
+  let confettiAnimId = null;
+  let confettiStopTime = 0;
+
+  function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  const confettiColors = ['#ff477e', '#ffb3c6', '#ffd166', '#8ec5fc', '#a1ffce', '#c3aefc'];
+
+  function createParticle(){
+    return {
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * canvas.height * 0.3,
+      size: 6 + Math.random() * 6,
+      color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+      speedY: 2 + Math.random() * 3,
+      speedX: (Math.random() - 0.5) * 2.5,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 10,
+      shape: Math.random() > 0.5 ? 'rect' : 'circle'
+    };
+  }
+
+  function launchConfetti(duration){
+    confettiStopTime = Date.now() + duration;
+    confettiParticles = [];
+    for (let i = 0; i < 150; i++){
+      confettiParticles.push(createParticle());
+    }
+    if (!confettiAnimId){
+      animateConfetti();
+    }
+  }
+
+  function animateConfetti(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const now = Date.now();
+    const stillSpawning = now < confettiStopTime;
+
+    if (stillSpawning && Math.random() > 0.6){
+      confettiParticles.push(createParticle());
+    }
+
+    confettiParticles.forEach(p => {
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.rotation += p.rotationSpeed;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      if (p.shape === 'rect'){
+        ctx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size/2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+
+    // Remove particles off screen once we've stopped spawning
+    confettiParticles = confettiParticles.filter(p => p.y < canvas.height + 30);
+
+    if (!stillSpawning && confettiParticles.length === 0){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiAnimId = null;
+      return;
+    }
+
+    confettiAnimId = requestAnimationFrame(animateConfetti);
+  }
+
+})();
+</script>
+
+</body>
+</html>
